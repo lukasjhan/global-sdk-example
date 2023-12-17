@@ -37,6 +37,8 @@ We make a React Provider component that serve as a bridge between the SDK and th
 
 Now, we can use the new SDK to do the same thing, but in a better way using [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore#subscribing-to-an-external-store)
 
+You can make a global SDK with React UI components easily and cleanly by using this method.
+
 ```javascript
 function App() {
   const data = useSyncExternalStore(
