@@ -43,7 +43,7 @@ You can make a global SDK with React UI components easily and cleanly by using t
 function App() {
   const data = useSyncExternalStore(
     mySDKStore.subscribe,
-    mySDKStore.getSnapshot
+    mySDKStore.getSnapshot,
   );
   return (
     <div className="App">
@@ -62,6 +62,39 @@ function App() {
     </div>
   );
 }
+```
+
+And you can check the implementation in src/external.ts
+
+```typescript
+let data = { label: 'Edit src/App.tsx and save to reload.' };
+let listeners: Array<() => void> = [];
+
+export const mySDKStore = {
+  setLabel(newLabel: string) {
+    data = { label: newLabel };
+    emitChange();
+  },
+  subscribe(listener: () => void) {
+    listeners = [...listeners, listener];
+    return () => {
+      listeners = listeners.filter((l) => l !== listener);
+    };
+  },
+  getSnapshot() {
+    return data;
+  },
+};
+
+function emitChange() {
+  for (let listener of listeners) {
+    console.log(1);
+    listener();
+  }
+}
+
+window.data = data;
+window.setLabel = mySDKStore.setLabel;
 ```
 
 We can use global scope object as a hook into the components. This allows us to use the SDK in a more natural way. It's just like a normal React component.
